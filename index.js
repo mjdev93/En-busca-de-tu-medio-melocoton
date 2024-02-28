@@ -6,7 +6,7 @@ const cors = require('cors')
 const morgan = require('morgan')
 async function checkAndSyncPostgreSQL() {
   await checkConnection()
-  addRelationsToModels()
+  //addRelationsToModels()
   await syncModels('alter')
 }
 function initializeAndListenWithExpress() {
