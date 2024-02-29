@@ -3,6 +3,7 @@ const Interest = require('../api/models/interest')
 const Videocall = require('../api/models/videocall')
 const InfoContact = require('../api/models/infoContact')
 const RequestList = require('../api/models/requestList')
+const UserInterest = require('../api/models/user_interest')
 
 
 function addRelationsToModels() {
@@ -18,17 +19,34 @@ function addRelationsToModels() {
     InfoContact.belongsTo(User, {
       onDelete: 'CASCADE'
     })
+/*
 
- /*
     //ONE TO MANY - User & Tweet
-    User.hasMany(Tweet, {})
-    Tweet.belongsTo(User, {})
+    User.hasMany(Videocall, {
+      as: 'grandwa_receiver',
+      foreignKey: 'receiverId'
+    })
+    Videocall.belongsTo(User, {
+      as: 'grandwa_receiver',
+      foreignKey: 'receiverId'
+    })
 
- */
+    User.hasMany(Videocall, {
+      as: 'grandwa_sender',
+      foreignKey: 'senderId'
+    })
+    Videocall.belongsTo(User, {
+      as: 'grandwa_sender',
+      foreignKey: 'senderId'
+    })
+*/
+    // USER TO USER
+    User.belongsToMany(User, { through: RequestList, foreignKey: 'sender_id', otherKey: 'receiver_id', as: 'sender' })
+    User.belongsToMany(User, { through: RequestList, foreignKey: 'receiver_id', otherKey: 'sender_id', as: 'receiver' })
     //MANY TO MANY
 
-    User.belongsToMany(Interest, {through: 'user_interest'})
-    Interest.belongsToMany(User, {through: 'user_interest'})
+    User.belongsToMany(Interest, { through: UserInterest })
+    Interest.belongsToMany(User, { through: UserInterest })
 
 
 
@@ -40,6 +58,6 @@ function addRelationsToModels() {
 
 }
 
- 
+
 
 module.exports = addRelationsToModels
