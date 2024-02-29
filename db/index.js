@@ -5,6 +5,9 @@ const sequelize = new Sequelize(process.env.DATABASE, process.env.USERNAME, proc
 	dialect: process.env.DIALECT,
 	port: process.env.DB_PORT,
 	logging: false,
+	define: {
+		timestamps: false  // I don't want timestamp fields by default
+	  }
 })
 async function checkConnection() {
 	try {

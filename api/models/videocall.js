@@ -4,11 +4,11 @@ const Videocall = sequelize.define(
 	'videocall',
 	{
 		start_hour: {
-			type: DataTypes.STRING,
+			type: DataTypes.DATE,
 			allowNull: false,
 		},
         finish_hour: {
-			type: DataTypes.STRING,
+			type: DataTypes.DATE,
 			allowNull: false,
 		},
     },

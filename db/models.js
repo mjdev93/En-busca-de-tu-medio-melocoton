@@ -1,10 +1,8 @@
-
-/*
 const User = require('../api/models/user')
-
-//const Interest = require('../api/models/interest')
-
-//const Videocall = require('../api/models/videocall')
+const Interest = require('../api/models/interest')
+const Videocall = require('../api/models/videocall')
+const InfoContact = require('../api/models/infoContact')
+const RequestList = require('../api/models/requestList')
 
 
 function addRelationsToModels() {
@@ -13,30 +11,26 @@ function addRelationsToModels() {
 
     //ONE TO ONE - Users & Contact
 
-    User.hasOne(Contact, {
+    User.hasOne(InfoContact, {
       onDelete: 'CASCADE'
     })
 
-    Contact.belongsTo(User, {
+    InfoContact.belongsTo(User, {
       onDelete: 'CASCADE'
     })
 
- 
+ /*
     //ONE TO MANY - User & Tweet
     User.hasMany(Tweet, {})
     Tweet.belongsTo(User, {})
 
-
+ */
     //MANY TO MANY
 
-    User.belongsToMany(Tweet, {through: 'like', as: 'likes'})
-    Tweet.belongsToMany(User, {through: 'like', as: 'likes'})
+    User.belongsToMany(Interest, {through: 'user_interest'})
+    Interest.belongsToMany(User, {through: 'user_interest'})
 
-    //MANY TO MANY
 
-    User.belongsToMany(User, {through: 'follower', as: 'follow'})
-
- 
 
   } catch (error) {
 
@@ -49,4 +43,3 @@ function addRelationsToModels() {
  
 
 module.exports = addRelationsToModels
-*/
