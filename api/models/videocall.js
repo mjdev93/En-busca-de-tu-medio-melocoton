@@ -4,15 +4,15 @@ const Videocall = sequelize.define(
 	'videocall',
 	{
 		start_hour: {
-			type: DataTypes.STRING,
+			type: DataTypes.DATE,
 			allowNull: false,
 		},
-        finish_hour: {
-			type: DataTypes.STRING,
+		finish_hour: {
+			type: DataTypes.DATE,
 			allowNull: false,
 		},
-    },
-    {timestamps: false}
-    
+	},
+	{ timestamps: false }
+
 )
 module.exports = Videocall
