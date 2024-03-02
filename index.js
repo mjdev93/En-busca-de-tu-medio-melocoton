@@ -7,7 +7,7 @@ const morgan = require('morgan')
 async function checkAndSyncPostgreSQL() {
   await checkConnection()
   addRelationsToModels()
-  await syncModels('force')
+  await syncModels('alter')
 }
 function initializeAndListenWithExpress() {
   const app = express()

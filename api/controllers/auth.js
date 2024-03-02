@@ -1,4 +1,4 @@
-const User = require('../models/user')
+/*const User = require('../models/user')
 const InfoContact = require('../models/infoContact')
 
 const jwt = require('jsonwebtoken')
@@ -68,3 +68,4 @@ module.exports = {
   signup,
   login
 }
+*/

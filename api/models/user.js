@@ -14,12 +14,12 @@ const User = sequelize.define(
         DNI: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true,
+            unique: true 
         },
         phone: {
 			type: DataTypes.STRING,
             allowNull: false,
-            unique: true,
+            unique: true 
         },
         email: {
             type: DataTypes.STRING,
@@ -35,7 +35,6 @@ const User = sequelize.define(
 		},
         
     },
-    {timestamps: false}
-    
+   
 )
 module.exports = User

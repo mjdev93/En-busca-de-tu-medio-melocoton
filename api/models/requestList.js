@@ -10,20 +10,26 @@ const RequestList = sequelize.define(
       autoIncrement: true,
       unique: true
     },
-    sender_id:{
+    initiatorId:{
       type: DataTypes.INTEGER,
-      allowNull: false,
     },
-    receiver_id:{
+    receiverId:{
       type: DataTypes.INTEGER,
-      allowNull: false,
     },
     status: {
       type: DataTypes.ENUM("pending", "accepted", "rejected"),
       allowNull: false,
     },
   },
-  { timestamps: false }
+  {
+    indexes: [
+      {
+        name: 'requestList_unique_index',
+        unique: true,
+        fields: ['initiatorId', 'receiverId', 'status']
+      }
+    ]
+  }
 
 )
 module.exports = RequestList

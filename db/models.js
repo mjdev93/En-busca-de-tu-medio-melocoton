@@ -19,32 +19,56 @@ function addRelationsToModels() {
     InfoContact.belongsTo(User, {
       onDelete: 'CASCADE'
     })
-/*
 
-    //ONE TO MANY - User & Tweet
+
+    //ONE TO MANY - User & Videocall
     User.hasMany(Videocall, {
-      as: 'grandwa_receiver',
-      foreignKey: 'receiverId'
+      foreignKey:'initiatorId',
+      as: 'initiatedCalls',
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE'
     })
     Videocall.belongsTo(User, {
-      as: 'grandwa_receiver',
-      foreignKey: 'receiverId'
+      foreignKey:'initiatorId',
+      as: 'initiator',
     })
 
     User.hasMany(Videocall, {
-      as: 'grandwa_sender',
-      foreignKey: 'senderId'
+      foreignKey: 'receiverId',
+      as: 'receivedCalls',
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE'
     })
     Videocall.belongsTo(User, {
-      as: 'grandwa_sender',
-      foreignKey: 'senderId'
+      foreignKey: 'receiverId',
+      as: 'receiver',
     })
-*/
-    // USER TO USER
-    User.belongsToMany(User, { through: RequestList, foreignKey: 'sender_id', otherKey: 'receiver_id', as: 'sender' })
-    User.belongsToMany(User, { through: RequestList, foreignKey: 'receiver_id', otherKey: 'sender_id', as: 'receiver' })
-    //MANY TO MANY
 
+  //ONE TO MANY - User & Request List
+    User.hasMany(RequestList, {
+      foreignKey:'initiatorId',
+      as: 'initiatedRequest',
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE'
+    })
+    RequestList.belongsTo(User, {
+      foreignKey:'initiatorId',
+      as: 'initiatorRequest',
+    })
+
+    User.hasMany(RequestList, {
+      foreignKey: 'receiverId',
+      as: 'receivedRequest',
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE'
+    })
+    RequestList.belongsTo(User, {
+      foreignKey: 'receiverId',
+      as: 'receiverRequest',
+    })
+    
+
+//MANY TO MANY USER TO INTEREST
     User.belongsToMany(Interest, { through: UserInterest })
     Interest.belongsToMany(User, { through: UserInterest })
 
