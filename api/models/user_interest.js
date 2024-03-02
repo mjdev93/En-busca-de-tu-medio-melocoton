@@ -11,7 +11,6 @@ const UserInterest = sequelize.define(
     },
 
 },
-    { timestamps: false }
 
 )
 module.exports = UserInterest

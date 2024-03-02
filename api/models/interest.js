@@ -8,7 +8,7 @@ const Interest = sequelize.define(
 			allowNull: false,
 		},
     },
-    {timestamps: false}
+
     
 )
 module.exports = Interest
