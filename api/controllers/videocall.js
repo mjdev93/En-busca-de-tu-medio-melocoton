@@ -106,7 +106,7 @@ async function answerVideocall(req, res){
 
 async function endVideocall(req, res){
 	try {
-		const [videocallExist, videocall] = await Videocall.update({finish_hour: Date.now()}, {
+		const [videocallExist, videocall] = await Videocall.update({finishHour: Date.now()}, {
 			returning: true,
 			where: {
 				id: req.params.id,
@@ -115,7 +115,7 @@ async function endVideocall(req, res){
         if (videocallExist !== 0) {
 			return res.status(200).json({ message: 'Videocall finished', videocall: videocall })
 		} else {
-			return res.status(404).send('Videocall not found')
+			return res.status(404).send('Videocall not found :(')
 		}
 	} catch (error) {
 		return res.status(500).send(error.message)
@@ -123,23 +123,24 @@ async function endVideocall(req, res){
 }
 
 async function myVideocalls(req, res) {
-	try {
-		const videocall = await Videocall.findAll({
-			where: {
-				[Op.or]: [
-					{initiatorId: req.body.userID},
-					{receiverId: req.body.userID}
-				]
-			}
-		})
-		if (videocall) {
-			return res.status(200).json(videocall)
-		} else {
-			return res.status(404).send('Videocall not found')
-		}
-	} catch (error) {
-		res.status(500).send(error.message)
-	}
+    try {
+        const [videocallExist, videocall] = await Videocall.findAll({
+            returning: true,
+            where: {
+                [Op.or]: [
+                    {initiatorId: req.body.iniciatorId},
+                    {receiverId: req.body.receiverId}
+                ]
+            }
+        })
+        if(videocallExist !== 0) {
+            return res.status(200).json(videocall)
+        } else {
+            return res.status(404).send('Videocall not found')
+        }
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
 }
 
 

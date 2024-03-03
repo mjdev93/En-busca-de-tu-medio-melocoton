@@ -11,7 +11,7 @@ const User = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        DNI: {
+        dni: {
             type: DataTypes.STRING,
             /*allowNull: false,
             unique: true */
@@ -40,7 +40,7 @@ const User = sequelize.define(
             {
                 unique: true,
                 allowNull: false,
-                fields: ['DNI']
+                fields: ['dni']
             },
 
             {

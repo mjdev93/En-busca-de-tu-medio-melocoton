@@ -12,4 +12,6 @@ router.use('/videocall', require('./videocall'))
 
 router.use('requestList', require('./requestList'))
 
+router.use('/auth', require('./auth'))
+
 module.exports = router

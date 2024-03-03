@@ -1,71 +1,50 @@
-/*const User = require('../models/user')
-const InfoContact = require('../models/infoContact')
-
+const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
 const signup = async (req, res) => {
   try {
-    const salt = bcrypt.genSaltSync(parseInt(process.env.BCRYPT_ROUNDS))
-    req.body.password = bcrypt.hashSync(req.body.password, salt)
 
-    const user = await User.create({
-      email: req.body.email,
-      password: req.body.password,
-      userName: req.body.userName,
-      age: req.body.age
-    })
-
-    const contact = await InfoContact.create({
-      phone: req.body.phone
-    })
-
-    await user.setInfoContact(contact)
-
-    const payload = { email: req.body.email }
-    const token = jwt.sign(payload, 'MiPrimerBackChachiPiruli', { expiresIn: '1h' })
-    return res.status(200).json({ data: token })  // === { token: token }
+    const saltRounds = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(req.body.password, saltRounds)
+    req.body.password = hashedPassword
+    const payload = {dni: req.body.dni}
+    const secret = process.env.SECRET
+    const token = jwt.sign(payload, secret, {expiresIn: '1h'})
+    await User.create(req.body)
+    return res.status(200).json({token})
   } catch (error) {
-    console.log('Error signing up user')
-    return res.status(500).json(error)
+    console.log(error)
+    res.status(500).send(error)
   }
 }
 
 const login = async (req, res) => {
-  try {
-
-
-
+  
+	try {
     const user = await User.findOne({
       where: {
-        email: req.body.email
+        dni: req.body.dni
       }
     })
-
-    if (!user) {
-      return res.status(404).send('Email or password wrong')
-    }
-
-    const checkPass = bcrypt.compareSync(req.body.password, user.password)
-
-    if (checkPass) {
-      const payload = { email: req.body.email }
-      const token = jwt.sign(payload, 'MiPrimerBackChachiPiruli', { expiresIn: '1h' })
-      return res.status(200).json({ token })  // === { token: token }
+    
+    if (!user) return res.status(404).send('Error: Email or Password incorrect') // Error in case we don't find the email
+    const comparePass = bcrypt.compareSync(req.body.password, user.password)
+    if (comparePass) {
+      const payload = {dni: req.body.dni}
+      const secret = process.env.SECRET
+      const token = jwt.sign(payload, secret, {expiresIn: '1h'})
+       return res.status(200).json({token})
     } else {
-      return res.status(404).send('Email or password wrong')
+        return res.status(404).json('Error: Email or Password incorrect')
     }
-
   } catch (error) {
-    console.log('Error login in')
-    return res.status(500).json(error)
+    console.log(error)
+    res.status(500).send(error)
   }
 }
-
-
 
 module.exports = {
   signup,
   login
 }
-*/
