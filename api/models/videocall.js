@@ -10,11 +10,11 @@ const Videocall = sequelize.define(
 			autoIncrement: true,
 			unique: true
 		},
-		start_hour: {
+		startHour: {
 			type: DataTypes.DATE,
 			allowNull: true,
 		},
-		finish_hour: {
+		finishHour: {
 			type: DataTypes.DATE,
 			allowNull: true,
 		},
@@ -34,7 +34,7 @@ const Videocall = sequelize.define(
 		{
 			name: 'videocalls_unique_index',
 			unique: true,
-			fields: ['start_hour', 'finish_hour', 'initiatorId', 'receiverId', 'answered']
+			fields: ['startHour', 'finishHour', 'initiatorId', 'receiverId', 'answered']
 		}
 	]
 }
