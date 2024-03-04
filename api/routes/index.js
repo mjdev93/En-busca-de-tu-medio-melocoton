@@ -8,6 +8,8 @@ router.use('/user', require('./user'))
 
 router.use('/ui', require('./user_interest'))
 
+router.use('/infoContact', require('./infoContact'))
+
 router.use('/videocall', require('./videocall'))
 
 router.use('requestList', require('./requestList'))
