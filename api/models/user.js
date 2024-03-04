@@ -11,15 +11,15 @@ const User = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        DNI: {
+        dni: {
             type: DataTypes.STRING,
-            allowNull: false,
-            unique: true 
+            /*allowNull: false,
+            unique: true */
         },
         phone: {
 			type: DataTypes.STRING,
-            allowNull: false,
-            unique: true 
+           /* allowNull: false,
+            unique: true*/ 
         },
         email: {
             type: DataTypes.STRING,
@@ -34,6 +34,21 @@ const User = sequelize.define(
             allowNull: false,
 		},
         
+    },
+    {
+        indexes: [
+            {
+                unique: true,
+                allowNull: false,
+                fields: ['dni']
+            },
+
+            {
+                unique: true,
+                allowNull: false,
+                fields: ['phone']
+            }
+        ]
     },
    
 )

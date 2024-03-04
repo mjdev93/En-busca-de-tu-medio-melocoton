@@ -19,8 +19,6 @@ async function getUserInterests(req, res) {
 }
 
 
-
-
 async function createUserInterest(req, res) {
     try {
         const { userId, interestId } = req.body;
@@ -94,18 +92,24 @@ async function updateUserInterest(req, res) {
 
 async function deleteUserInterest(req, res) {
     try {
-        const user = await UserInterest.destroy({
-            where: {
-                id: req.params.id,
-            },
-        })
-        if (user) {
-            return res.status(200).json('User deleted')
-        } else {
-            return res.status(404).send('User not found')
+        const userId = req.params.userId;
+
+        // Buscar el usuario por su ID
+        const user = await User.findByPk(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado :(' });
         }
+
+        // Eliminar todos los intereses del usuario utilizando el método removeInterests
+        await user.removeInterests();
+
+        // Enviar respuesta de éxito
+        return res.status(200).json({ message: 'Intereses eliminados del usuario correctamente' });
     } catch (error) {
-        return res.status(500).send(error.message)
+        // Manejar errores
+        console.error('Error al eliminar intereses del usuario:', error);
+        return res.status(500).json({ message: 'Error al eliminar intereses del usuario' });
     }
 }
 
