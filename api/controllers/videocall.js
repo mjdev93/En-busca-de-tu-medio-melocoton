@@ -124,8 +124,7 @@ async function endVideocall(req, res){
 
 async function myVideocalls(req, res) {
     try {
-        const [videocallExist, videocall] = await Videocall.findAll({
-            returning: true,
+        const videocall = await Videocall.findAll({
             where: {
                 [Op.or]: [
                     {initiatorId: req.body.iniciatorId},
@@ -133,7 +132,7 @@ async function myVideocalls(req, res) {
                 ]
             }
         })
-        if(videocallExist !== 0) {
+        if(videocall) {
             return res.status(200).json(videocall)
         } else {
             return res.status(404).send('Videocall not found')
