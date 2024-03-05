@@ -20,7 +20,7 @@ async function getOneVideocall(req, res) {
 		if (videocall) {
 			return res.status(200).json(videocall)
 		} else {
-			return res.status(404).send('Videocall not found 1')
+			return res.status(404).send('Videocall not found')
 		}
 	} catch (error) {
 		res.status(500).send(error.message)
