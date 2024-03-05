@@ -20,7 +20,7 @@ async function getOneVideocall(req, res) {
 		if (videocall) {
 			return res.status(200).json(videocall)
 		} else {
-			return res.status(404).send('Videocall not found')
+			return res.status(404).send('Videocall not found 1')
 		}
 	} catch (error) {
 		res.status(500).send(error.message)
@@ -47,7 +47,7 @@ async function updateVideocall(req, res) {
         if (videocallExist !== 0) {
 			return res.status(200).json({ message: 'Videocall updated', videocall: videocall })
 		} else {
-			return res.status(404).send('Videocall not found')
+			return res.status(404).send('Videocall not found 2')
 		}
 	} catch (error) {
 		return res.status(500).send(error.message)
@@ -64,7 +64,7 @@ async function deleteVideocall(req, res) {
 		if (videocall) {
 			return res.status(200).json('Videocall deleted')
 		} else {
-			return res.status(404).send('Videocall not found')
+			return res.status(404).send('Videocall not found 3')
 		}
 	} catch (error) {
 		return res.status(500).send(error.message)
@@ -97,7 +97,7 @@ async function answerVideocall(req, res){
         if (videocallExist !== 0) {
 			return res.status(200).json({ message: 'Videocall answered', videocall: videocall })
 		} else {
-			return res.status(404).send('Videocall not found')
+			return res.status(404).send('Videocall not found 4')
 		}
 	} catch (error) {
 		return res.status(500).send(error.message)
@@ -124,19 +124,18 @@ async function endVideocall(req, res){
 
 async function myVideocalls(req, res) {
     try {
-        const [videocallExist, videocall] = await Videocall.findAll({
-            returning: true,
+        const videocall = await Videocall.findAll({
             where: {
                 [Op.or]: [
-                    {initiatorId: req.body.iniciatorId},
-                    {receiverId: req.body.receiverId}
+                    {initiatorId: req.body.userId},
+                    {receiverId: req.body.userId}
                 ]
             }
         })
-        if(videocallExist !== 0) {
+        if(videocall) {
             return res.status(200).json(videocall)
         } else {
-            return res.status(404).send('Videocall not found')
+            return res.status(404).send('Videocall not found O')
         }
     } catch (error) {
         res.status(500).send(error.message)

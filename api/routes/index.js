@@ -10,7 +10,7 @@ router.use('/ui', require('./user_interest'))
 
 router.use('/videocall', require('./videocall'))
 
-router.use('requestList', require('./requestList'))
+router.use('/requestlist', require('./requestList'))
 
 router.use('/auth', require('./auth'))
 
