@@ -17,7 +17,7 @@ async function getAllUsersInterests(req, res) {
 
 async function getUserInterests(req, res) {
     try {
-        const user = await User.findByPk(req.params.id)
+        const user = res.locals.user
         if (user) {
             const interests = await user.getInterests();
             return res.status(200).send(interests)
@@ -32,7 +32,14 @@ async function getUserInterests(req, res) {
 
 async function createUserInterest(req, res) {
     try {
-        const { userId, interestId } = req.body;
+        const {interestId} = req.body;
+        let userId
+        if(isNaN(req.params.id)){
+            userId = res.locals.user.id
+        }
+        else{
+            userId = req.params.id
+        }
         if (!userId || !interestId) {
             return res.status(400).json({ message: 'Faltan parámetros en el cuerpo de la solicitud' });
         }
@@ -50,43 +57,6 @@ async function createUserInterest(req, res) {
     } catch (error) {
         console.error('Error al añadir interés al usuario:', error);
         return res.status(500).json({ message: 'Error al añadir interés al usuario' });
-    }
-}
-
-async function updateUserInterest(req, res) {
-    try {
-        const { userId, interestId } = req.body;
-        if (!userId || !interestId) {
-            return res.status(400).json({ message: 'Faltan parámetros en el cuerpo de la solicitud' });
-        }
-        const user = await User.findByPk(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado' });
-        }
-
-        const interest = await Interest.findByPk(interestId);
-        if (!interest) {
-            return res.status(404).json({ message: 'Interés no encontrado' });
-        }
-
-        // Verificar si el usuario ya tiene este interés
-        const existingUserInterest = await UserInterest.findOne({
-            where: {
-                userId: userId,
-                interestId: interestId
-            }
-        });
-
-        if (existingUserInterest) {
-            return res.status(400).json({ message: 'El usuario ya tiene este interés' });
-        }
-
-        // Si no tiene el interés, lo agregamos
-        await user.addInterest(interest);
-        return res.status(200).json({ message: 'Interés actualizado correctamente para el usuario' });
-    } catch (error) {
-        console.error('Error al actualizar interés del usuario:', error);
-        return res.status(500).json({ message: 'Error al actualizar interés del usuario' });
     }
 }
 
@@ -111,10 +81,9 @@ async function deleteUserInterests(req, res) {
 // Elimina un interes asociado a un usuario
 async function deleteUserInterest(req, res) {
     try {
-        const { userId, interestId } = req.body;
-
-        // Buscar el usuario por su ID
-        const user = await User.findByPk(userId);
+        const { interestId } = req.body;
+        // Buscar el usuario
+        const user = res.locals.user
 
         if (!user) {
             return res.status(404).json({ message: 'Usuario no encontrado :(' });
@@ -143,7 +112,6 @@ module.exports = {
     getAllUsersInterests,
     getUserInterests,
     createUserInterest,
-    updateUserInterest,
     deleteUserInterests,
     deleteUserInterest
 }
