@@ -12,7 +12,7 @@ router.use('/infoContact', require('./infoContact'))
 
 router.use('/videocall', require('./videocall'))
 
-router.use('requestList', require('./requestList'))
+router.use('/requestlist', require('./requestList'))
 
 router.use('/auth', require('./auth'))
 
