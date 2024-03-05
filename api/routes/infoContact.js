@@ -1,11 +1,11 @@
 const router = require('express').Router()
 
-const { createInfoContact } = require('../controllers/infoContact')
+const { createInfoContactFunction, getAllinfoContact, getOneInfo, updateInfoContact, deleteInfoContact } = require('../controllers/infoContact')
 
-//router.get('/', getAllInterest)
-//router.get('/:id', getOneInterest)
-router.post('/', createInfoContact)
-//router.patch('/:id', updateInterest)
-//router.delete('/:id', deleteInterest)
+router.get('/', getAllinfoContact)
+router.get('/:id', getOneInfo)
+router.post('/:id', createInfoContactFunction)
+router.patch('/:id', updateInfoContact)
+router.delete('/:id', deleteInfoContact)
 
 module.exports = router
