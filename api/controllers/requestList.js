@@ -1,5 +1,7 @@
 const { Op } = require("sequelize");
-const Match = require('../models/requestList')
+const Match = require('../models/requestList');
+const UserInterest = require("../models/user_interest");
+const User = require("../models/user");
 
 async function getAllMatch(req, res) {
 	try {
@@ -171,6 +173,45 @@ async function myMatchList(req, res) {
 	}
 }
 
+async function myHalfPeach(req, res){
+
+	const userId = res.locals.user.rol === "grandwa" ? res.locals.user.id : req.body.userId
+	try{
+		const userInterest = await UserInterest.findAll({
+			where: {
+				userId: userId
+			}
+		})
+		const userInterestList = userInterest.map((e)=>{return e.dataValues.interestId})
+		let usersForInterest = []
+		for(i = 0; i < userInterestList.length; i++){
+			let userArray = await UserInterest.findAll({
+				where: {
+					interestId: userInterestList[i]
+				}
+			})
+			usersForInterest.push(userArray.map((a) => { return a.dataValues.userId}))
+		}
+		usersForInterest = usersForInterest.flat().sort((a, b) => a - b)
+		usersForInterest = usersForInterest.filter((e) => e != userId)
+		const peaches = peachesInOrder(usersForInterest)
+		const orderedPeaches = peaches.sort((a, b) => b[1] - a[1])
+		const halfPeach = await User.findByPk(Number(orderedPeaches[0][0]))
+		return res.status(200).json({ message: `Grandwa ${halfPeach.name} with userId ${halfPeach.id} has ${orderedPeaches[0][1]} interest in common`})
+	} catch (error) {
+		return res.status(500).json({ message: 'Error al buscar melocotones' });
+	}
+}
+
+function peachesInOrder(peachArr){
+	peachObj = {};
+	peachArr.forEach((e) => {
+		if(!peachObj[e]) { peachObj[e] = 0 }
+		peachObj[e] += 1;
+	});
+	return Object.entries(peachObj)
+}
+
 async function checkMatchExist(receiverId, initiatorId) {
 	try {
 		const [matchExist, match] = await Match.update({status: "accepted"}, {
@@ -199,5 +240,6 @@ module.exports = {
 	sendMatch,
 	acceptMatch,
 	rejectMatch,
-	myMatchList
+	myMatchList,
+	myHalfPeach
 }
