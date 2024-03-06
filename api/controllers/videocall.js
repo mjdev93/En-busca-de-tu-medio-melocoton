@@ -76,7 +76,7 @@ async function startVideocall(req, res){
 		const body = {
 			startHour: Date.now(),
 			finishHour: null,
-			initiatorId: req.body.initiatorId,
+			initiatorId: res.locals.user.id,
 			receiverId: req.body.receiverId
 		}
 		const videocall = await Videocall.create(body)
@@ -124,18 +124,20 @@ async function endVideocall(req, res){
 
 async function myVideocalls(req, res) {
     try {
+		let userId
+		res.locals.user.rol === "grandwa" ? userId = res.locals.user.id : userId = req.body.userId
         const videocall = await Videocall.findAll({
             where: {
                 [Op.or]: [
-                    {initiatorId: req.body.userId},
-                    {receiverId: req.body.userId}
+                    {initiatorId: userId},
+                    {receiverId: userId}
                 ]
             }
         })
         if(videocall) {
             return res.status(200).json(videocall)
         } else {
-            return res.status(404).send('Videocall not found O')
+            return res.status(404).send('Videocall not found')
         }
     } catch (error) {
         res.status(500).send(error.message)

@@ -130,39 +130,37 @@ async function rejectMatch(req, res){
 
 async function myMatchList(req, res) {
 	try {
-		const match = await Match.findAll({
-			where: {
-				[Op.or]: [
-					{initiatorId: req.body.userId},
-					{receiverId: req.body.userId}
-				]
-			}
-		})
-		if (match) {
-			return res.status(200).json(match)
-		} else {
-			return res.status(404).send('Match list not found')
+		let userId, match, state
+		res.locals.user.rol === "grandwa" ? userId = res.locals.user.id : userId = req.body.userId
+		if(req.body.status){ state = req.body.status }
+		if(!state){
+			match = await Match.findAll({
+				where: {
+					[Op.or]: [
+						{initiatorId: userId},
+						{receiverId: userId}
+					]
+				}
+			})
 		}
-	} catch (error) {
-		res.status(500).send(error.message)
-	}
-}
-
-async function myPendingMatchList(req, res){
-    try {
-		const match = await Match.findAll({
-			where: {
-                [Op.and]: [
-                    {[Op.or]: [
-                        {initiatorId: req.body.userId},
-                        {receiverId: req.body.userId}
-                    ]},
-                    {
-                        status:"pending"
-                    }
-                ]
-			}
-		})
+		else{
+			match = await Match.findAll({
+				where: {
+					[Op.and]: [
+						{
+						[Op.or]: [
+							{initiatorId: userId},
+							{receiverId: userId}
+						]
+					},
+					{
+						status: state
+					}
+					]
+					
+				}
+			})
+		}
 		if (match) {
 			return res.status(200).json(match)
 		} else {
@@ -201,6 +199,5 @@ module.exports = {
 	sendMatch,
 	acceptMatch,
 	rejectMatch,
-	myMatchList,
-    myPendingMatchList
+	myMatchList
 }

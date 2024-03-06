@@ -1,17 +1,17 @@
 const router = require('express').Router()
+const { checkAuth, checkAdmin } = require('../middlewares/index')
 
-const { getAllMatch, getOneMatch, createMatch, updateMatch, deleteMatch, sendMatch, acceptMatch, rejectMatch, myMatchList, myPendingMatchList} = require('../controllers/requestList')
+const { getAllMatch, getOneMatch, createMatch, updateMatch, deleteMatch, sendMatch, acceptMatch, rejectMatch, myMatchList} = require('../controllers/requestList')
 
-router.get('/', getAllMatch) // funciona
-router.get('/mymatchlist', myMatchList) // funciona
-router.get('/mypendingmatchlist', myPendingMatchList) // funciona
-router.get('/:id', getOneMatch) // funciona
-router.post('/sendmatch', sendMatch) //funciona
-router.post('/', createMatch) // funciona
-router.patch('/acceptmatch/:id', acceptMatch) // funciona
-router.patch('/rejectmatch/:id', rejectMatch) // funciona
-router.patch('/:id', updateMatch) // funciona
-router.delete('/:id', deleteMatch) // funciona
+router.get('/', checkAuth, checkAdmin, getAllMatch) // funciona
+router.get('/mymatchlist', checkAuth, myMatchList) // funciona
+router.get('/:id', checkAuth, checkAdmin, getOneMatch) // funciona
+router.post('/sendmatch', checkAuth, sendMatch) //funciona
+router.post('/', checkAuth, checkAdmin, createMatch) // funciona
+router.patch('/acceptmatch/:id', checkAuth, acceptMatch) // funciona
+router.patch('/rejectmatch/:id', checkAuth, rejectMatch) // funciona
+router.patch('/:id', checkAuth, checkAdmin, updateMatch) // funciona
+router.delete('/:id', checkAuth, checkAdmin, deleteMatch) // funciona
 
 
 
