@@ -1,11 +1,13 @@
 const router = require('express').Router()
+const { checkAuth, checkAdmin } = require('../middlewares/index')
 
-const { getUserInterests, createUserInterest, updateUserInterest,deleteUserInterest } = require('../controllers/user_interest')
+const { getUserInterests, createUserInterest, deleteUserInterests, deleteUserInterest, getAllUsersInterests } = require('../controllers/user_interest')
 
-
-router.get('/:id', getUserInterests)
-router.post('/', createUserInterest)
-router.patch('/:id', updateUserInterest) // Por donde debo pedir los datos?
-router.delete('/:id', deleteUserInterest)
+router.get('/', checkAuth, checkAdmin, getAllUsersInterests)
+router.get('/userinterests', checkAuth, getUserInterests)
+router.post('/', checkAuth, createUserInterest)
+router.post('/:id', checkAuth, checkAdmin, createUserInterest)
+router.delete('/:id', checkAuth, checkAdmin, deleteUserInterests)
+router.delete('/', checkAuth, deleteUserInterest) //Update User
 
 module.exports = router

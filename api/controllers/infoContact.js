@@ -12,9 +12,11 @@ async function getAllinfoContact(req, res) {
 	} catch (error) {
 		res.status(500).send(error.message)
 	}
+
 }
 
 async function getOneInfo(req, res) {
+
 	try {
 		const infoUser = await InfoContact.findByPk(req.params.id)
 		if (infoUser) {
@@ -27,38 +29,44 @@ async function getOneInfo(req, res) {
 	}
 }
 
-async function createInfoContact(req, res) {
-	try {
+async function createInfoContactFunction(req, res) {
+    try {
    
-        const infoContact = await InfoContact.create(req.body)
+        const user = await User.findByPk(req.params.id);
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+        const infoContact = await InfoContact.create(req.body);
+		const userContact = await infoContact.setUser(user)
         return res.status(201).json({ message: 'Información de contacto creada correctamente', infoContact });
 
     } catch (error) {
 
         console.error('Error al crear información de contacto:', error);
-        return res.status(500).json({ message: 'Error al crear información de contacto' + error });
+        return res.status(500).json({ message: 'Error al crear información de contacto'});
     }
 
 }
-async function updateUser(req, res) {
+
+async function updateInfoContact(req, res) {
 	try {
-		const [userExist, user] = await InfoContact.update(req.body, {
+		const [infoExist, info] = await InfoContact.update(req.body, {
 			returning: true,
 			where: {
 				id: req.params.id,
 			},
 		})
-        if (userExist !== 0) {
-			return res.status(200).json({ message: 'User updated', user: user })
+        if (infoExist !== 0) {
+			return res.status(200).json({ message: 'Info updated', info: info })
 		} else {
-			return res.status(404).send('User not found')
+			return res.status(404).send('Info not found')
 		}
 	} catch (error) {
 		return res.status(500).send(error.message)
 	}
 }
 
-async function deleteUser(req, res) {
+async function deleteInfoContact(req, res) {
 	try {
 		const user = await InfoContact.destroy({
 			where: {
@@ -66,9 +74,9 @@ async function deleteUser(req, res) {
 			},
 		})
 		if (user) {
-			return res.status(200).json('User deleted')
+			return res.status(200).json('Info deleted')
 		} else {
-			return res.status(404).send('User not found')
+			return res.status(404).send('Info not found')
 		}
 	} catch (error) {
 		return res.status(500).send(error.message)
@@ -78,7 +86,7 @@ async function deleteUser(req, res) {
 module.exports = {
 	getAllinfoContact,
 	getOneInfo,
-	createInfoContact,
-	updateUser,
-	deleteUser,
+	createInfoContactFunction,
+	updateInfoContact,
+	deleteInfoContact
 }

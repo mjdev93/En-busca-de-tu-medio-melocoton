@@ -73,7 +73,7 @@ async function deleteMatch(req, res) {
 
 async function sendMatch(req, res){
 	try {
-        const matchUpdated = await checkMatchExist(req.body.initiatorId, req.body.receiverId)
+        const matchUpdated = await checkMatchExist(req.body.receiverId, req.body.initiatorId)
         if(matchUpdated){
             return res.status(200).json({message: 'Match updated', match: matchUpdated})
         }
@@ -97,8 +97,7 @@ async function acceptMatch(req, res){
 		const [matchExist, match] = await Match.update({status: "accepted"}, {
 			returning: true,
 			where: {
-                initiatorId: req.body.initiatorId,
-				receiverId: req.body.receiverId,
+                id: req.params.id
 			},
 		})
         if (matchExist !== 0) {
@@ -116,8 +115,7 @@ async function rejectMatch(req, res){
 		const [matchExist, match] = await Match.update({status: "rejected"}, {
 			returning: true,
 			where: {
-                initiatorId: req.body.initiatorId,
-				receiverId: req.body.receiverId,
+                id: req.params.id
 			},
 		})
         if (matchExist !== 0) {
