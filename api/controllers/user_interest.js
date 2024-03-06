@@ -61,6 +61,7 @@ async function createUserInterest(req, res) {
 }
 
 // Elimina todos los intereses asociados a un user
+
 async function deleteUserInterests(req, res) {
     try {
         const user = await User.findByPk(req.params.id)
@@ -78,6 +79,7 @@ async function deleteUserInterests(req, res) {
         return res.status(500).json({ message: 'Error al eliminar intereses del usuario' });
     }
 }
+
 // Elimina un interes asociado a un usuario
 async function deleteUserInterest(req, res) {
     try {
