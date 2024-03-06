@@ -1,11 +1,15 @@
 const router = require('express').Router()
+const {
+    checkAuth,
+    checkAdmin
+  } = require("../middlewares/index")
 
 const { createInfoContactFunction, getAllinfoContact, getOneInfo, updateInfoContact, deleteInfoContact } = require('../controllers/infoContact')
 
-router.get('/', getAllinfoContact)
-router.get('/:id', getOneInfo)
-router.post('/:id', createInfoContactFunction)
-router.patch('/:id', updateInfoContact)
-router.delete('/:id', deleteInfoContact)
+router.get('/', checkAuth, checkAdmin, getAllinfoContact)
+router.get('/:id', checkAuth, getOneInfo)
+router.post('/:id', checkAuth, createInfoContactFunction)
+router.patch('/:id',  checkAuth, updateInfoContact)
+router.delete('/:id', checkAuth, deleteInfoContact)
 
 module.exports = router
