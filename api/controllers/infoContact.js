@@ -1,25 +1,26 @@
 const InfoContact = require('../models/infoContact')
 const User = require('../models/user')
-async function getAllUsers(req, res) {
+
+async function getAllinfoContact(req, res) {
 	try {
-		const users = await User.findAll()
-		if (users) {
-			return res.status(200).json(users)
+		const infoContact = await InfoContact.findAll()
+		if (infoContact) {
+			return res.status(200).json(infoContact)
 		} else {
-			return res.status(404).send('No users found')
+			return res.status(404).send('No info Contact found')
 		}
 	} catch (error) {
 		res.status(500).send(error.message)
 	}
 }
 
-async function getOneUser(req, res) {
+async function getOneInfo(req, res) {
 	try {
-		const user = await User.findByPk(req.params.id)
-		if (user) {
-			return res.status(200).json(user)
+		const infoUser = await InfoContact.findByPk(req.params.id)
+		if (infoUser) {
+			return res.status(200).json(infoUser)
 		} else {
-			return res.status(404).send('User not found')
+			return res.status(404).send('User info not found')
 		}
 	} catch (error) {
 		res.status(500).send(error.message)
@@ -27,26 +28,21 @@ async function getOneUser(req, res) {
 }
 
 async function createInfoContact(req, res) {
-    try {
+	try {
    
-        const user = await User.findByPk(req.params.id);
-
-        if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado' });
-        }
-        const infoContact = await user.createInfoContact(req.body);
+        const infoContact = await InfoContact.create(req.body)
         return res.status(201).json({ message: 'Información de contacto creada correctamente', infoContact });
 
     } catch (error) {
 
         console.error('Error al crear información de contacto:', error);
-        return res.status(500).json({ message: 'Error al crear información de contacto' });
+        return res.status(500).json({ message: 'Error al crear información de contacto' + error });
     }
-}
 
+}
 async function updateUser(req, res) {
 	try {
-		const [userExist, user] = await User.update(req.body, {
+		const [userExist, user] = await InfoContact.update(req.body, {
 			returning: true,
 			where: {
 				id: req.params.id,
@@ -64,7 +60,7 @@ async function updateUser(req, res) {
 
 async function deleteUser(req, res) {
 	try {
-		const user = await User.destroy({
+		const user = await InfoContact.destroy({
 			where: {
 				id: req.params.id,
 			},
@@ -80,8 +76,8 @@ async function deleteUser(req, res) {
 }
 
 module.exports = {
-	getAllUsers,
-	getOneUser,
+	getAllinfoContact,
+	getOneInfo,
 	createInfoContact,
 	updateUser,
 	deleteUser,

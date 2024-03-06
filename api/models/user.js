@@ -35,7 +35,7 @@ const User = sequelize.define(
 		},
         
     },
-    {
+    /*{
         indexes: [
             {
                 unique: true,
@@ -49,7 +49,7 @@ const User = sequelize.define(
                 fields: ['phone']
             }
         ]
-    },
+    },*/
    
 )
-module.exports = User
+module.exports = User 
