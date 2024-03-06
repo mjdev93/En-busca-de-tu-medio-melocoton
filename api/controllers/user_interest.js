@@ -71,7 +71,7 @@ async function deleteUserInterests(req, res) {
         })
         const interest = ui.map((e)=>{return e.dataValues.interestId})
         const removeUser = await user.removeInterests(interest)
-        return res.send(200).json({message: 'Intereses eliminados'})
+        return res.status(200).json({message: 'Intereses eliminados'})
 
     } catch (error) {
         console.error('Error al eliminar intereses del usuario:', error);

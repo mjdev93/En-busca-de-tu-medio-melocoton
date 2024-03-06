@@ -8,6 +8,6 @@ router.get('/userinterests', checkAuth, getUserInterests)
 router.post('/', checkAuth, createUserInterest)
 router.post('/:id', checkAuth, checkAdmin, createUserInterest)
 router.delete('/:id', checkAuth, checkAdmin, deleteUserInterests)
-router.delete('/', checkAuth, deleteUserInterest) //Update User
+router.delete('/', checkAuth, deleteUserInterest) 
 
 module.exports = router
